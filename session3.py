@@ -1,5 +1,5 @@
 import json
-filename = 'c:/Users/RITZ/Documents/Python/user_list.json'
+filename = 'user_list.json' #put the .json file in the same folder:)
 
 with open(filename) as usrs:
         data = json.load(usrs)
