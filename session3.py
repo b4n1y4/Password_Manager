@@ -139,7 +139,7 @@ def convert_to_hash(pwd):
     return base64.b64encode(binascii.hexlify(dk)).decode('ascii')
 
 def encrypter(pwd):
-    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
+    file = open('key.key', 'rb')
     key = file.read()
     file.close()
     encoded = pwd.encode()
@@ -149,7 +149,7 @@ def encrypter(pwd):
     return base64.b64encode(encrypted).decode('ascii')
 
 def decrypter(pwd):
-    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
+    file = open('key.key', 'rb')
     key = file.read()
     file.close()
     f= Fernet(key)
