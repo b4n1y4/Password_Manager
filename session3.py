@@ -6,7 +6,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 
-filename = 'c:/users/ritz/documents/python/password manager/user_list.json' #put the .json file in the same folder:)
+filename = 'user_list.json' #put the .json file in the same folder:)
 
 with open(filename) as usrs:
     data = json.load(usrs)
