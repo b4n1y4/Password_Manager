@@ -47,25 +47,7 @@ for i in range (0,5):
     else:
         print("Wrong value")
         wrong_tries += 1
-        ("_______________________________________________________________")
-# while(wrong_tries != 0):
-#     usr_input = str(input("Enter your choice : "))
-#     if(len(usr_input) == 1):
-#         if(49 <= ord(usr_input) <= 51):
-#             usr_input = int(usr_input)
-#             comp = random.randint(1,3)
-#             print("You chose : "+choices[str(usr_input)]+"\nComputer chose : " + choices[str(comp)])
-#             logic(usr_input,comp)
-#             print("_______________________________________________________________")
-#         else:
-#             print("Wrong value")
-#             wrong_tries += 1
-#             ("_______________________________________________________________")
-#     else:
-#         print("Wrong value")
-#         wrong_tries += 1
-#         ("_______________________________________________________________")
-#     wrong_tries -=1    
+        ("_______________________________________________________________")  
 if man_score > comp_score:
     print("you win")
 elif man_score == comp_score:
