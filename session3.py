@@ -5,9 +5,9 @@ import os
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
+import getpass
 
-filename = 'user_list.json' #put the .json file in the same folder:)
-
+filename = 'c:/users/ritz/documents/python/password manager/user_list.json' 
 with open(filename) as usrs:
     data = json.load(usrs)
 usr_list=data["users"]
@@ -18,8 +18,10 @@ def log_in(a,b):
             print ("welcome! aaha login")
             print("__________________________________\n")
             logged_in(a)
+            return True
         else:
             print ("Password galat h")
+            return False
 
 def logged_in(a):
     while(True):
@@ -68,15 +70,18 @@ def show_pass(a):
         for key in pass_list[a]:
             print(f"{key}")
         key = str(input("Enter the key whose password has to be provided\n"))
-        if check_auth(a):
-            print("__________________________________\n")
-            print(f"Password for {key} is {decrypter(pass_list[a][key])}")
+        if key in pass_list[a]:
+            if check_auth(a):
+                print("__________________________________\n")
+                print(f"Password for {key} is {decrypter(pass_list[a][key])}")
+        else:
+            print("\nKey not found\n")
     else:
         print("No saved passwords found.\n")
     
 def add_pass(a):
     key = str(input("Enter the key\n")).lower()
-    value = str(input("Enter the password\n"))
+    value = str(getpass.getpass("Enter the password\n"))
     pass_list[a][key] = encrypter(value)
     data["passwords"] = pass_list
     update_record()
@@ -101,7 +106,7 @@ def update_pass(a):
     inp = str(input("Enter the key\n"))
     old_pass = encrypter(str(input("Enter the old password.\n")))
     if pass_list[a][inp] == old_pass:
-        pass_list[a][inp] = encrypter(str(input("Enter the new password.\n")))
+        pass_list[a][inp] = encrypter(str(getpass.getpass("Enter the new password.\n")))
         data["passwords"] = pass_list
         update_record()
 
@@ -110,7 +115,7 @@ def update_acc_pass(username):
     if username in usr_list:
         old_pass = str(input("Enter the old password.\n"))
         if usr_list[username] == old_pass:
-            usr_list[username] = str(input("Enter the new password.\n"))
+            usr_list[username] = str(getpass.getpass("Enter the new password.\n"))
             data["users"] = usr_list
             update_record()
 
@@ -129,7 +134,7 @@ def update_record():
         json.dump(data,usrs)
 
 def check_auth(a):
-    passw = str(input("Enter the account password\n"))
+    passw = str(getpass.getpass("Enter the account password\n"))
     if usr_list[a] == convert_to_hash(passw):
         return True
     return False
@@ -139,7 +144,7 @@ def convert_to_hash(pwd):
     return base64.b64encode(binascii.hexlify(dk)).decode('ascii')
 
 def encrypter(pwd):
-    file = open('key.key', 'rb')
+    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
     key = file.read()
     file.close()
     encoded = pwd.encode()
@@ -149,7 +154,7 @@ def encrypter(pwd):
     return base64.b64encode(encrypted).decode('ascii')
 
 def decrypter(pwd):
-    file = open('key.key', 'rb')
+    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
     key = file.read()
     file.close()
     f= Fernet(key)
@@ -158,27 +163,32 @@ def decrypter(pwd):
     del key
     return decrypted.decode()
 
-# main
-while(True):
-    user_inp = int(input("0.Exit\n1. Log In\n2. Sign Up\n"))
-    if user_inp == 0:
-        exit()
-    if user_inp == 1:
-        print ("Yaha login karein")
-        a = str(input("username: "))
-        if(a in usr_list):
-            b = str(input("pwd: "))
-            log_in(a,b)
-            print("__________________________________\n")
+
+#______________________________________________________________________________
+
+def main():
+    while(True):
+        user_inp = int(input("0.Exit\n1. Log In\n2. Sign Up\n"))
+        if user_inp == 0:
+            exit()
+        if user_inp == 1:
+            print ("Yaha login karein")
+            a = str(input("username: "))
+            if(a in usr_list):
+                b = str(getpass.getpass("pwd: "))
+                log_in(a,b)
+                print("__________________________________\n")
+            else:
+                print("Username not registered. Please try again!!")
+        elif  user_inp == 2:
+            a = str(input("username: "))
+            if a in usr_list:
+                print("Sorry this Username is already taken. Try some other...")
+            else:
+                b = str(getpass.getpass("pwd: "))
+                sign_up(a,b)
+                print("__________________________________\n")
         else:
-            print("Username not registered. Please try again!!")
-    elif  user_inp == 2:
-        a = str(input("username: "))
-        if a in usr_list:
-            print("Sorry this Username is already taken. Try some other...")
-        else:
-            b = str(input("pwd: "))
-            sign_up(a,b)
-            print("__________________________________\n")
-    else:
-        print ("Enter the correct choice")
+            print ("Enter the correct choice")
+
+main()
