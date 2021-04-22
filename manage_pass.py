@@ -18,10 +18,8 @@ def log_in(a,b):
             print ("welcome! aaha login")
             print("__________________________________\n")
             logged_in(a)
-            return True
         else:
             print ("Password galat h")
-            return False
 
 def logged_in(a):
     while(True):
@@ -163,6 +161,11 @@ def decrypter(pwd):
     del key
     return decrypted.decode()
 
+def check_avl(u):
+    if u in usr_list:
+        return True
+    else:
+        return False
 
 #______________________________________________________________________________
 
