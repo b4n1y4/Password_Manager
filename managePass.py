@@ -15,9 +15,11 @@ def log_in(a,b):
         if usr_list[a] == convert_to_hash(b):
             print ("welcome! aaha login")
             print("__________________________________\n")
-            logged_in(a)
+            # logged_in(a)
+            return True
         else:
             print ("Password galat h")
+            return False
 def logged_in(a):
     while(True):
         try:
