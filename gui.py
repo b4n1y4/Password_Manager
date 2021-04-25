@@ -1,6 +1,7 @@
 from tkinter import *
 import managePass as o
 import time
+from tkinter import messagebox
 def clearFrame():
     for widget in container.winfo_children():
         widget.destroy()
@@ -34,12 +35,10 @@ def signup(a, b):
         Label(container, text="Please Enter the password", fg='red').grid(row=4, column=0)
     else:
         if a in o.usr_list:
-            Label(container, text="username registered", fg='red').grid(row=4, column=0)    
+            messagebox.showwarning('Warning!','Username already registered! Try a new one')
             signup_window(container)
         else:
-            print("3>2")
             o.sign_up(a, b)
-            Label(container, text="Signup succeful", fg='green').grid(row=4, column=0)
             clearFrame()
             Label(container, text="Signup successfull! Enter credentials to log in", fg='green').grid(row=5, column=0)
             login_window(container)
