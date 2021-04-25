@@ -7,7 +7,7 @@ def clearFrame():
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
-    logout_btn = Button(container, text="Logout")
+    logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window(container)])
     addpass_btn = Button(container, text="Add password")
     delpass_btn = Button(container, text="Remove a Password")
     showpass_btn = Button(container, text="Show Passwords")
@@ -15,6 +15,7 @@ def logged_in(a, b):
     addpass_btn.grid(row=2,column=0,padx=5,pady=10)
     delpass_btn.grid(row=3,column=0,padx=5,pady=10)
     showpass_btn.grid(row=4,column=0,padx=5,pady=10)
+
 def login(a, b):
     if not a:
         alert.config(text="Please Enter the Username")
@@ -25,18 +26,24 @@ def login(a, b):
             alert.config(text="Wrong password!")
         else:
             logged_in(a, b)
+
 def signup(a, b):
     if not a:
-        alert.config(text="Please Enter the Username")
+        Label(container, text="Please Enter the Username", fg='red').grid(row=4, column=0)
     elif not b:
-        alert.config(text="Please Enter the password")
+        Label(container, text="Please Enter the password", fg='red').grid(row=4, column=0)
     else:
         if a in o.usr_list:
-            alert.config(text="Username already exists. Try another!")
+            Label(container, text="username registered", fg='red').grid(row=4, column=0)    
+            signup_window(container)
         else:
+            print("3>2")
             o.sign_up(a, b)
-            alert.config(text="SignUp successful")
+            Label(container, text="Signup succeful", fg='green').grid(row=4, column=0)
+            clearFrame()
+            Label(container, text="Signup successfull! Enter credentials to log in", fg='green').grid(row=5, column=0)
             login_window(container)
+            
 def signup_window(master):
     clearFrame()
     root.title("Password Manager|SignUp")
@@ -54,7 +61,10 @@ def signup_window(master):
     pass_frame.grid(row=1, column=0)
     signup_btn = Button(master, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", command=lambda: signup(usr_entry.get(), pass_entry.get()),borderwidth=0, width=15)
     signup_btn.grid(row=3,column=0, pady=10)
+
+
 def login_window(master):
+    # clearFrame()
     root.title("Password Manager|Login")
     usr_frame=Frame(master)
     usr_label = Label(usr_frame, text="Username:",font=("Arial", 12))
@@ -80,5 +90,6 @@ container = Frame(root, width=300, height=300)
 container.pack()
 alert=Label(container, text="Welcome User!", fg="red")
 alert.grid(row=4, column=0)
+
 login_window(container)
 root.mainloop()
