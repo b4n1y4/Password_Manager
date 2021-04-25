@@ -6,7 +6,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 import getpass
-filename = 'C:/Users\RITZ/Documents/GitHub/Password_Manager/user_list.json'
+filename = 'C:/user_list.json'
 with open(filename) as usrs:
     data = json.load(usrs)
 usr_list=data["users"]
@@ -141,7 +141,7 @@ def convert_to_hash(pwd):
     dk = hashlib.pbkdf2_hmac('sha256',bytes(pwd, 'utf-8'),b'pr45enj1+g4u+4m',500406,16)
     return base64.b64encode(binascii.hexlify(dk)).decode('ascii')
 def encrypter(pwd):
-    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
+    file = open('c:/key.key', 'rb')
     key = file.read()
     file.close()
     encoded = pwd.encode()
@@ -150,7 +150,7 @@ def encrypter(pwd):
     del key
     return base64.b64encode(encrypted).decode('ascii')
 def decrypter(pwd):
-    file = open('c:/users/ritz/documents/python/password manager/key.key', 'rb')
+    file = open('c:/key.key', 'rb')
     key = file.read()
     file.close()
     f= Fernet(key)
