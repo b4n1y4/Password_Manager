@@ -53,12 +53,15 @@ def logged_in(a):
             else:
                 print("Wrong choice.")
                 print("__________________________________\n")           
+
 def sign_up(a,b):
     usr_list[a] = convert_to_hash(b)
     pass_list[a] = {}
     data["passwords"] = pass_list
     data["users"] = usr_list
     update_record()
+
+
 def show_pass(a):
     if(pass_list[a]):
         for key in pass_list[a]:
