@@ -5,3 +5,5 @@ Please check session3.py.. Its done...(I hope)
 PS- Save the session3.py, key.key and user_list.json files in the same dir
 
 3/01/2021 - Learning GitHub again
+
+26/04/2021 - Fixed major bugs, added Login and Sign Up functionality. 
