@@ -5,17 +5,39 @@ from tkinter import messagebox
 def clearFrame():
     for widget in container.winfo_children():
         widget.destroy()
+
+def showpass_window(a, b):
+    root.title("Passwords - "+ a)
+    back_btn = Button(container, text="Back", command= lambda: logged_in(a, b))
+    back_btn.pack()
+
+    frame = Frame(container, width=490, height=250)
+    frame.pack()
+    dict = o.pass_list[a]
+    list = []
+    for key in dict.keys():
+        list.append(key)
+    
+    for i in range(len(list)):
+        print(i)
+        Button(container, text = list[i]).grid(row=i, column=0)
+
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
     logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window(container)])
     addpass_btn = Button(container, text="Add password")
-    delpass_btn = Button(container, text="Remove a Password")
-    showpass_btn = Button(container, text="Show Passwords")
+    showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)])
+    updateaccpass_btn = Button(container, text="Update Account Password")
+    delacc_btn = Button(container, text="Delete Account")
+    
     logout_btn.grid(row=1,column=0,padx=5,pady=10)
     addpass_btn.grid(row=2,column=0,padx=5,pady=10)
-    delpass_btn.grid(row=3,column=0,padx=5,pady=10)
-    showpass_btn.grid(row=4,column=0,padx=5,pady=10)
+    showpass_btn.grid(row=3,column=0,padx=5,pady=10)
+    updateaccpass_btn.grid(row=4, column=0, pady=10)
+    delacc_btn.grid(row=5, column=0, pady=10)
+
+
 
 def login(a, b):
     if not a:
@@ -85,7 +107,8 @@ def login_window(master):
 root = Tk()
 root.geometry('500x350')
 root.resizable(0,0)
-container = Frame(root, width=300, height=300)
+root.config(bg="red")
+container = Frame(root, width=500, height=350, bg="yellow")
 container.pack()
 alert=Label(container, text="Welcome User!", fg="red")
 alert.grid(row=4, column=0)
