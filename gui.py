@@ -22,7 +22,7 @@ def showpass_window(a, b):
         print(i)
         Button(container, text = list[i]).grid(row=i, column=0)
 
-def addpass():
+def addpass_window():
     root.title("Add password")
     web_frame=Frame(container)
     web_label = Label(web_frame, text="Website:",font=("Arial", 12))
@@ -37,16 +37,17 @@ def addpass():
     web_frame.grid(row=1, column=0)
     pass_frame.grid(row=2, column=0)
 
-    add_new_btn = Button(container, text="Add", command = lambda: [clearFrame(), login_window(container)])
+    add_new_btn = Button(container, text="Add", command = lambda: [add_pass(web_entry.get(),pass_entry.get())])
     add_new_btn.grid(row=3,column=0,padx=5,pady=10)
 
-
+def add_pass(a,b):
+    print("key = ",a, " and password = ",b)
 
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
     logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window(container)])
-    addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass()])
+    addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass_window()])
     showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)])
     updateaccpass_btn = Button(container, text="Update Account Password")
     delacc_btn = Button(container, text="Delete Account")
