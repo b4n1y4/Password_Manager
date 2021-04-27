@@ -75,13 +75,15 @@ def show_pass(a):
             print("\nKey not found\n")
     else:
         print("No saved passwords found.\n")  
-def add_pass(a):
-    key = str(input("Enter the key\n")).lower()
-    value = str(getpass.getpass("Enter the password\n"))
-    pass_list[a][key] = encrypter(value)
+def add_pass(usrname, key, pwd):
+    # key = str(input("Enter the key\n")).lower()
+    # value = str(getpass.getpass("Enter the password\n"))
+    pass_list[usrname][key] = encrypter(pwd)
     data["passwords"] = pass_list
     update_record()
-    print(f"Password for {key} added successfully")
+    print(f"Password for {usrname} added successfully")
+
+
 def del_pass(a):
     key = str(input("Enter the key.\n"))
     if key in pass_list[a]:
