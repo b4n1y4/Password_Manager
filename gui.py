@@ -141,15 +141,50 @@ def addpass_window(a, b):
     back_btn = Button(container, text="Back", command= lambda: logged_in(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
     back_btn.pack(pady=10)
 
+def updateaccpass_window(usr, pwd):
+    clearFrame()
+    root.title("Update Account Password - "+usr)
+    frame = Frame(container)
+    oldpass_label = Label(frame, text="Enter the old password", font=('Arial',12))
+    oldpass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
+    newpass_label = Label(frame, text="Enter the new Password", font=('Arial',12))
+    newpass_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
+    conf_label = Label(frame, text="Confirm new password", font=('Arial',12))
+    conf_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
+
+    def updateaccpass():
+        if(oldpass_entry.get().strip() == pwd):
+            if(newpass_entry.get().strip() == conf_entry.get().strip()):
+                o.usr_list[usr] = o.convert_to_hash(newpass_entry.get().strip())
+                o.update_record()
+                clearFrame()
+                login_window()
+                Label(container, text=f'Password updated succesfully', fg='green').grid(row=6, column=0)
+            else:
+                Label(frame, text="Passwords don't match! Re-enter", fg="red").grid(row=4, column=0)
+        else:
+            Label(frame, text="Old password incorrect!", fg="red").grid(row=4, column=0)
+
+    btn = Button(container,text="Update", command= updateaccpass)
+    frame.pack()
+    oldpass_label.grid(row=0, column=0,padx=5, pady=10)
+    oldpass_entry.grid(row=0, column=1,padx=5, pady=10)
+    newpass_label.grid(row=1, column=0,padx=5, pady=10)
+    newpass_entry.grid(row=1, column=1,padx=5, pady=10)
+    conf_label.grid(row=2, column=0,padx=5, pady=10)
+    conf_entry.grid(row=2, column=1,padx=5, pady=10)
+    btn.pack()
+
+
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
     logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window()], width=20)
     addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass_window(a, b)], width=20)
     showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)], width=20)
-    updateaccpass_btn = Button(container, text="Update Account Password", width=20)
-    delacc_btn = Button(container, text="Delete Account", width=20)
-    
+    updateaccpass_btn = Button(container, text="Update Account Password",command=lambda: updateaccpass_window(a,b), width=20)
+    delacc_btn = Button(container, text="Delete Account",command =lambda: delacc_window(a, b) , width=20)
+
     logout_btn.grid(row=1,column=0,padx=5,pady=10)
     addpass_btn.grid(row=2,column=0,padx=5,pady=10)
     showpass_btn.grid(row=3,column=0,padx=5,pady=10)
@@ -164,10 +199,14 @@ def login(a, b):
     elif not b:
         Label(container, text="Please Enter the password", fg='red', width=20).grid(row=4, column=0)
     else:
-        if not o.log_in(a, b):
-            Label(container, text="Wrong Password!", fg='red', width=20).grid(row=4, column=0)
+        if not o.check_avl(a):
+            Label(container, text="Account not found.\nTry signing up.", fg='red', width=20).grid(row=4, column=0)
+            login_window()
         else:
-            logged_in(a, b)
+            if not o.log_in(a, b):
+                Label(container, text="Wrong Password!", fg='red', width=20).grid(row=4, column=0)
+            else:
+                logged_in(a, b)
 
 def signup(a, b):
     if not a:
