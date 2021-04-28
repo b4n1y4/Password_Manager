@@ -50,15 +50,11 @@ def showpass_window(a, b):
             updatebtnlst[i].grid(row=i, column=4, padx=10, pady=10)
     else:
         Label(frame, text="No passwords saved!").pack()
-    
-    def hide():
-        for i in range(len(btnlst)):
-            labellst[i].config(text="***********")
-            labellst[i].grid(row=i, column=1)
 
     btn_frame = Frame(container)
-    hide_btn = Button(btn_frame, text="Hide", command=lambda: showpass_window(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
-    hide_btn.grid(row=0, column=0, padx=10, pady=10)
+    if btnlst:
+        hide_btn = Button(btn_frame, text="Hide", command=lambda: showpass_window(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+        hide_btn.grid(row=0, column=0, padx=10, pady=10)
     back_btn = Button(btn_frame, text="Back", command= lambda: logged_in(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
     back_btn.grid(row=0, column=1, padx=10, pady=10)
     btn_frame.pack(pady=10)
@@ -68,7 +64,7 @@ def updatepass_window(usr, key, pwd):
     clearFrame()
     root.title("Update Password "+key)
     frame = Frame(container)
-    oldpass_label = Label(frame, text="Enter the account password", font=('Arial',12))
+    oldpass_label = Label(frame, text="Enter the Account password", font=('Arial',12))
     oldpass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
     newpass_label = Label(frame, text="Enter the new Password", font=('Arial',12))
     newpass_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
@@ -87,7 +83,7 @@ def updatepass_window(usr, key, pwd):
             else:
                 Label(frame, text="Passwords don't match! Re-enter", fg="red").grid(row=4, column=0)
         else:
-            Label(frame, text="Old password incorrect!", fg="red").grid(row=4, column=0)
+            Label(frame, text="Account password incorrect!", fg="red").grid(row=4, column=0)
 
     btn = Button(container,text="Update", command= updatepass)
     frame.pack()
@@ -146,7 +142,7 @@ def updateaccpass_window(usr, pwd):
     clearFrame()
     root.title("Update Account Password - "+usr)
     frame = Frame(container)
-    oldpass_label = Label(frame, text="Enter the old password", font=('Arial',12))
+    oldpass_label = Label(frame, text="Enter the account password", font=('Arial',12))
     oldpass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
     newpass_label = Label(frame, text="Enter the new Password", font=('Arial',12))
     newpass_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
@@ -178,6 +174,36 @@ def updateaccpass_window(usr, pwd):
 
     back_btn = Button(container, text="Back", command= lambda: logged_in(usr, pwd),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
     back_btn.pack(pady=10)
+
+def delacc_window(usr, pwd):
+    clearFrame()
+    root.title("Delete Account - "+usr)
+    def delacc_confirm():
+        clearFrame()
+        root.title("Delete Account - "+usr)
+        frame = Frame(container)
+        pass_label = Label(frame, text="Enter the account password", font=('Arial',12)).grid(row=0, column=0, padx=10, pady=10)
+        pass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
+        pass_entry.grid(row=0, column=1, padx=10, pady=10)
+        
+        def delacc():
+            if pass_entry.get() == pwd:
+                o.del_acc(usr)
+                clearFrame()
+                Label(container, text="Account deleted successfully", fg="green").grid(row=4, column=0)
+                login_window()
+            else:
+                Label(container, text="Enter the correct password", fg="red").grid(row=4, column=0)
+                pass_entry.delete(0, 'end')
+        Button(frame, text="Delete!", command=delacc).grid(row=1, column=0, padx=10, pady=10)
+        frame.pack()
+
+    Label(container, text="Are you sure you want to delete the account - "+usr+"?").pack()
+    btn_frame = Frame(container)
+    Button(btn_frame, text="Yes I want to delete this account.", command=delacc_confirm).grid(row=0, column=0, padx=10, pady=10)
+    Button(btn_frame, text="No, I changed my mind, don't delete.", command= lambda: logged_in(usr, pwd)).grid(row=0, column=1, padx=10, pady=10)
+    btn_frame.pack(pady=10)
+
 
 def logged_in(a, b):
     clearFrame()
