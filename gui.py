@@ -7,100 +7,145 @@ def clearFrame():
         widget.destroy()
 
 def showpass_window(a, b):
+    clearFrame()
     root.title("Passwords - "+ a)
-    back_btn = Button(container, text="Back", command= lambda: logged_in(a, b))
-    back_btn.pack()
-
-    frame = Frame(container, width=490, height=250)
+    frame = Frame(container)
     frame.pack()
     dict = o.pass_list[a]
     list = []
+    btnlst = []
+    delbtnlst = []
+    labellst = []
     for key in dict.keys():
         list.append(key)
+    def showpass(usr,key, ind):
+        # clearFrame()
+        # showpass_window(a, b)
+        for i in range(len(btnlst)):
+            if i != ind:
+                labellst[i].config(text="***********")
+                labellst[i].grid(row=i, column=1)
+            else:
+                labellst[i].config(text=o.decrypter(o.pass_list[usr][key]))
+                labellst[i].grid(row=ind, column=1)
     
-    for i in range(len(list)):
-        print(i)
-        Button(container, text = list[i]).grid(row=i, column=0)
+    def delpass(usr, key, ind):
+        print(f'{key} deleted')
+        o.del_pass(usr, key)
+        btnlst.pop(ind)
+        delbtnlst.pop(ind)
+        labellst.pop(ind)
+        showpass_window(a, b)
+    if o.pass_list[a]:
+        for i in range(len(list)):
+            x = f'{i+1}. {list[i]}'
+            btnlst.append(Button(frame, text = x, width=10, command=lambda c=i: showpass(a,btnlst[c].cget("text")[3:], (int)(btnlst[c].cget("text")[0])-1)))
+            btnlst[i].grid(row=i, column=0, padx=10, pady=10)
+            labellst.append(Label(frame, text="***********", width=20, bg="yellow"))
+            labellst[i].grid(row=i, column=1, padx=10, pady=10)
+            delbtnlst.append(Button(frame, text="Delete", command=lambda c=i: delpass(a, btnlst[c].cget("text")[3:], (int)(btnlst[c].cget("text")[0])-1)))
+            delbtnlst[i].grid(row=i, column=3, padx=10, pady=10)
+    else:
+        Label(frame, text="No passwords saved!").pack()
+    
+    def hide():
+        for i in range(len(btnlst)):
+            labellst[i].config(text="***********")
+            labellst[i].grid(row=i, column=1)
+
+    btn_frame = Frame(container)
+    hide_btn = Button(btn_frame, text="Hide", command=lambda: showpass_window(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+    hide_btn.grid(row=0, column=0, padx=10, pady=10)
+    back_btn = Button(btn_frame, text="Back", command= lambda: logged_in(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+    back_btn.grid(row=0, column=1, padx=10, pady=10)
+    btn_frame.pack(pady=10)
+    
 
 def updatepass_window(usr, key, pwd):
     clearFrame()
     root.title("Update Password "+key)
-    oldpass_label = Label(container, text="Enter the old password")
-    oldpass_entry = Entry(container, show='*', borderwidth = 0)
-    newpass_label = Label(container, text="Enter the new Password")
-    newpass_entry = Entry(container, show="*", borderwidth=0)
-    conf_label = Label(container, text="Confirm new password")
-    conf_entry = Entry(container, show="*", borderwidth=0)
+    frame = Frame(container)
+    oldpass_label = Label(frame, text="Enter the old password", font=('Arial',12))
+    oldpass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
+    newpass_label = Label(frame, text="Enter the new Password", font=('Arial',12))
+    newpass_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
+    conf_label = Label(frame, text="Confirm new password", font=('Arial',12))
+    conf_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
 
     def updatepass():
         if(oldpass_entry.get().strip() == pwd):
             if(newpass_entry.get().strip() == conf_entry.get().strip()):
                 o.pass_list[usr][key] = o.encrypter(newpass_entry.get().strip())
                 o.update_record()
+                clearFrame()
                 logged_in(usr, pwd)
+                Label(container, text=f'Key {key} updated succesfully', fg='green').grid(row=6, column=0)
+
             else:
-                Label(container, text="Passwords don't match! Re-enter", fg="red").grid(row=4, column=0)
+                Label(frame, text="Passwords don't match! Re-enter", fg="red").grid(row=4, column=0)
         else:
-            Label(container, text="Old password incorrect!", fg="red").grid(row=4, column=0)
+            Label(frame, text="Old password incorrect!", fg="red").grid(row=4, column=0)
 
     btn = Button(container,text="Update", command= updatepass)
-
-    oldpass_label.grid(row=0, column=0)
-    oldpass_entry.grid(row=0, column=1)
-    newpass_label.grid(row=1, column=0)
-    newpass_entry.grid(row=1, column=1)
-    conf_label.grid(row=2, column=0)
-    conf_entry.grid(row=2, column=1)
-    btn.grid(row=3, column=0)
+    frame.pack()
+    oldpass_label.grid(row=0, column=0,padx=5, pady=10)
+    oldpass_entry.grid(row=0, column=1,padx=5, pady=10)
+    newpass_label.grid(row=1, column=0,padx=5, pady=10)
+    newpass_entry.grid(row=1, column=1,padx=5, pady=10)
+    conf_label.grid(row=2, column=0,padx=5, pady=10)
+    conf_entry.grid(row=2, column=1,padx=5, pady=10)
+    btn.pack()
 
 
 def addpass_window(a, b):
     root.title("Add password")
-    web_frame=Frame(container)
-    web_label = Label(web_frame, text="Website:",font=("Arial", 12))
-    web_entry = Entry(web_frame, borderwidth=0)
-    web_label.grid(row=0, column=0)
-    web_entry.grid(row=0,column=1, padx=20, pady=10)
+    key_frame=Frame(container)
+    key_label = Label(key_frame, text="Key:",font=("Arial", 12), width=20)
+    key_entry = Entry(key_frame, borderwidth=0)
+    key_label.grid(row=0, column=0, padx=20, pady=10)
+    key_entry.grid(row=0,column=1, padx=20, pady=10)
     pass_frame = Frame(container)
-    pass_label = Label(pass_frame, text="Password: ",font=("Arial", 12))
+    pass_label = Label(pass_frame, text="Password: ",font=("Arial", 12), width=20)
     pass_entry = Entry(pass_frame, show="*", borderwidth=0)
-    pass_label.grid(row=0, column=0)
+    pass_label.grid(row=0, column=0, padx=20, pady=10)
     pass_entry.grid(row=0,column=1, padx=20, pady=10)
-    passconfirm_label = Label(pass_frame, text="Confirm Password:",font=("Arial", 12)).grid(row=1, column=0)
+    passconfirm_label = Label(pass_frame, text="Confirm Password:",font=("Arial", 12), width=20).grid(row=1, column=0, padx=20, pady=10)
     passconfirm_entry = Entry(pass_frame, show="*", borderwidth=0)
     passconfirm_entry.grid(row=1, column=1, padx=20, pady=10)
-    web_frame.pack()
+    key_frame.pack()
     pass_frame.pack()
 
     def addpass():
-        web = web_entry.get().strip()
+        key = key_entry.get().strip()
         pwd = pass_entry.get().strip()
         conf = passconfirm_entry.get().strip()
         if (pwd == conf):
-            if web in list(o.pass_list[a]):
-                Label(container, text=f'The key {web} already exists.\nClick on the following button to update the password or chose a new key').pack()
-                Button(container, text="Update", command=lambda: updatepass_window(a, web, pwd)).pack()
+            if key in list(o.pass_list[a]):
+                Label(container, text=f'The key {key} already exists.\nClick on the following button to update the password or chose a new key').pack()
+                Button(container, text="Update", command=lambda: updatepass_window(a, key, pwd)).pack()
             else:
-                o.add_pass(a, web, pwd)
+                o.add_pass(a, key, pwd)
                 logged_in(a, b)
-                Label(container, text=f'Key {web} added succesfully', fg='green').grid(row=6, column=0)
+                Label(container, text=f'Key {key} added succesfully', fg='green').grid(row=6, column=0)
         else:
             passconfirm_entry.delete(0, 'end')
             pass_entry.delete(0, 'end')
             Label(container, text="Password does not match. Please reenter.", fg='red').grid(row=4, column=0).pack()
             
 
-    add_new_btn = Button(container, text="Add", command = addpass)
+    add_new_btn = Button(container, text="Add", command = addpass, borderwidth=0,width=10, bg="#35d132", activebackground="#2fb82c", fg="white", activeforeground="white")
     add_new_btn.pack()
+    back_btn = Button(container, text="Back", command= lambda: logged_in(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+    back_btn.pack(pady=10)
 
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
-    logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window(container)])
-    addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass_window(a, b)])
-    showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)])
-    updateaccpass_btn = Button(container, text="Update Account Password")
-    delacc_btn = Button(container, text="Delete Account")
+    logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window()], width=20)
+    addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass_window(a, b)], width=20)
+    showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)], width=20)
+    updateaccpass_btn = Button(container, text="Update Account Password", width=20)
+    delacc_btn = Button(container, text="Delete Account", width=20)
     
     logout_btn.grid(row=1,column=0,padx=5,pady=10)
     addpass_btn.grid(row=2,column=0,padx=5,pady=10)
@@ -112,77 +157,78 @@ def logged_in(a, b):
 
 def login(a, b):
     if not a:
-        alert.config(text="Please Enter the Username")
+        Label(container, text="Please Enter the Username", fg='red', width=20).grid(row=4, column=0)
     elif not b:
-        alert.config(text="Please Enter the password")
+        Label(container, text="Please Enter the password", fg='red', width=20).grid(row=4, column=0)
     else:
         if not o.log_in(a, b):
-            alert.config(text="Wrong password!")
+            Label(container, text="Wrong Password!", fg='red', width=20).grid(row=4, column=0)
         else:
             logged_in(a, b)
 
 def signup(a, b):
     if not a:
-        Label(container, text="Please Enter the Username", fg='red').grid(row=4, column=0)
+        Label(container, text="Please Enter the Username", fg='red', width=20).grid(row=4, column=0)
     elif not b:
-        Label(container, text="Please Enter the password", fg='red').grid(row=4, column=0)
+        Label(container, text="Please Enter the password", fg='red', width=20).grid(row=4, column=0)
     else:
         if o.check_avl(a):
             messagebox.showwarning('Warning!','Username already registered! Try a new one')
-            signup_window(container)
+            signup_window()
         else:
             o.sign_up(a, b)
             clearFrame()
-            Label(container, text="Signup successfull! Enter credentials to log in", fg='green').grid(row=5, column=0)
-            login_window(container)
+            Label(container, text="Signup successfull!\nEnter credentials to log in", fg='green', width=30).grid(row=5, column=0)
+            login_window()
             
-def signup_window(master):
+def signup_window():
     clearFrame()
     root.title("Password Manager|SignUp")
-    usr_frame=Frame(master)
+    usr_frame=Frame(container)
     usr_label = Label(usr_frame, text="Username:",font=("Arial", 12))
     usr_entry = Entry(usr_frame, borderwidth=0)
     usr_label.grid(row=0, column=0)
     usr_entry.grid(row=0,column=1, padx=20, pady=10)
-    pass_frame = Frame(master)
+    pass_frame = Frame(container)
     pass_label = Label(pass_frame, text="Password: ",font=("Arial", 12))
     pass_entry = Entry(pass_frame, show="*", borderwidth=0)
     pass_label.grid(row=0, column=0)
     pass_entry.grid(row=0,column=1, padx=20, pady=10)
     usr_frame.grid(row=0, column=0)
     pass_frame.grid(row=1, column=0)
-    signup_btn = Button(master, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", command=lambda: signup(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
+    signup_btn = Button(container, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", command=lambda: signup(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
     signup_btn.grid(row=3,column=0, pady=10)
+    back_btn = Button(container, text="Back", command=lambda: [clearFrame(), login_window()],bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", borderwidth=0, width=15)
+    back_btn.grid(row=4, column=0, pady=10)
 
-
-def login_window(master):
+def login_window():
     # clearFrame()
     root.title("Password Manager|Login")
-    usr_frame=Frame(master)
+    usr_frame=Frame(container)
     usr_label = Label(usr_frame, text="Username:",font=("Arial", 12))
     usr_entry = Entry(usr_frame, borderwidth=0)
     usr_label.grid(row=0, column=0)
     usr_entry.grid(row=0,column=1, padx=20, pady=10)
-    pass_frame = Frame(master)
+    pass_frame = Frame(container)
     pass_label = Label(pass_frame, text="Password: ",font=("Arial", 12))
     pass_entry = Entry(pass_frame, show="*", borderwidth=0)
     pass_label.grid(row=0, column=0)
     pass_entry.grid(row=0,column=1, padx=20, pady=10)
     usr_frame.grid(row=0, column=0)
     pass_frame.grid(row=1, column=0)
-    login_btn = Button(master, text="LOGIN", bg="#35d132", activebackground="#2fb82c", fg="white", activeforeground="white", command=lambda: login(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
+    login_btn = Button(container, text="LOGIN", bg="#35d132", activebackground="#2fb82c", fg="white", activeforeground="white", command=lambda: login(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
     login_btn.grid(row=2, column=0)
-    signup_btn = Button(master, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", command=lambda: signup_window(master),borderwidth=0, width=15)
+    signup_btn = Button(container, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", command=signup_window,borderwidth=0, width=15)
     signup_btn.grid(row=3,column=0, pady=10)
 
 root = Tk()
 root.geometry('500x350')
 root.resizable(0,0)
-root.config(bg="red")
-container = Frame(root, width=500, height=350, bg="yellow")
+# root.config(bg="red")
+container = Frame(root, width=500, height=350)
 container.pack()
 alert=Label(container, text="Welcome User!", fg="red")
 alert.grid(row=4, column=0)
 
-login_window(container)
+login_window()
 root.mainloop()
