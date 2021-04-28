@@ -84,17 +84,17 @@ def add_pass(usrname, key, pwd):
     print(f"Password for {usrname} added successfully")
 
 
-def del_pass(a):
-    key = str(input("Enter the key.\n"))
-    if key in pass_list[a]:
-        if check_auth(a):
-            pass_list[a].pop(key)
-            data["passwords"] = pass_list
-            update_record()
-        else:
-            print("Wrong password entered. Password not deleted.\n")
-    else:
-        print(f"Key - {key} does not exist.\n")
+def del_pass(a, key):
+    # key = str(input("Enter the key.\n"))
+    # if key in pass_list[a]:
+    #     if check_auth(a):
+    pass_list[a].pop(key)
+    data["passwords"] = pass_list
+    update_record()
+        # else:
+            # print("Wrong password entered. Password not deleted.\n")
+    # else:
+        # print(f"Key - {key} does not exist.\n")
 def update_pass(a):
     if pass_list[a]:
         print("Passwords stored for:\n")
