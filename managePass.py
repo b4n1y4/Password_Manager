@@ -124,16 +124,16 @@ def update_acc_pass(username):
     else:
         print("Wrong password entered!")
 def del_acc(username):
-    username=username.lower()
-    if check_auth(username):
-        usr_list.pop(username)
-        pass_list.pop(username)
-        data["users"] = usr_list
-        data["passwords"] = pass_list
-        update_record()
-        print(f"Account - {username} Deleted")
-    else:
-        print("Wrong password entered")
+    # username=username.lower()
+    # if check_auth(username):
+    usr_list.pop(username)
+    pass_list.pop(username)
+    data["users"] = usr_list
+    data["passwords"] = pass_list
+    update_record()
+    # print(f"Account - {username} Deleted")
+    # else:
+        # print("Wrong password entered")
 def update_record():
     with open(filename,'w') as usrs:
         json.dump(data,usrs)
