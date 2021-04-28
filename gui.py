@@ -68,7 +68,7 @@ def updatepass_window(usr, key, pwd):
     clearFrame()
     root.title("Update Password "+key)
     frame = Frame(container)
-    oldpass_label = Label(frame, text="Enter the old password", font=('Arial',12))
+    oldpass_label = Label(frame, text="Enter the account password", font=('Arial',12))
     oldpass_entry = Entry(frame, show='*', borderwidth = 0, font=('Arial',12))
     newpass_label = Label(frame, text="Enter the new Password", font=('Arial',12))
     newpass_entry = Entry(frame, show="*", borderwidth=0, font=('Arial',12))
@@ -163,7 +163,7 @@ def updateaccpass_window(usr, pwd):
             else:
                 Label(frame, text="Passwords don't match! Re-enter", fg="red").grid(row=4, column=0)
         else:
-            Label(frame, text="Old password incorrect!", fg="red").grid(row=4, column=0)
+            Label(frame, text="Account password incorrect!", fg="red").grid(row=4, column=0)
 
     btn = Button(container,text="Update", command= updateaccpass)
     frame.pack()
