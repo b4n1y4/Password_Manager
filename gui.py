@@ -98,7 +98,8 @@ def updatepass_window(usr, key, pwd):
     conf_label.grid(row=2, column=0,padx=5, pady=10)
     conf_entry.grid(row=2, column=1,padx=5, pady=10)
     btn.pack()
-
+    back_btn = Button(container, text="Back", command= lambda: logged_in(usr, pwd),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+    back_btn.pack(pady=10)
 
 def addpass_window(a, b):
     root.title("Add password")
