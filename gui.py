@@ -15,6 +15,7 @@ def showpass_window(a, b):
     list = []
     btnlst = []
     delbtnlst = []
+    updatebtnlst = []
     labellst = []
     for key in dict.keys():
         list.append(key)
@@ -45,6 +46,8 @@ def showpass_window(a, b):
             labellst[i].grid(row=i, column=1, padx=10, pady=10)
             delbtnlst.append(Button(frame, text="Delete", command=lambda c=i: delpass(a, btnlst[c].cget("text")[3:], (int)(btnlst[c].cget("text")[0])-1)))
             delbtnlst[i].grid(row=i, column=3, padx=10, pady=10)
+            updatebtnlst.append(Button(frame, text="Update", command =lambda c=i:updatepass_window(a, btnlst[c].cget("text")[3:], b)))
+            updatebtnlst[i].grid(row=i, column=4, padx=10, pady=10)
     else:
         Label(frame, text="No passwords saved!").pack()
     
