@@ -130,7 +130,7 @@ def addpass_window(a, b):
         else:
             passconfirm_entry.delete(0, 'end')
             pass_entry.delete(0, 'end')
-            Label(container, text="Password does not match. Please reenter.", fg='red').grid(row=4, column=0).pack()
+            Label(container, text="Password does not match. Please reenter.", fg='red').grid(row=4, column=0)
             
 
     add_new_btn = Button(container, text="Add", command = addpass, borderwidth=0,width=10, bg="#35d132", activebackground="#2fb82c", fg="white", activeforeground="white")
