@@ -20,8 +20,6 @@ def showpass_window(a, b):
     for key in dict.keys():
         list.append(key)
     def showpass(usr,key, ind):
-        # clearFrame()
-        # showpass_window(a, b)
         for i in range(len(btnlst)):
             if i != ind:
                 labellst[i].config(text="***********")
@@ -295,7 +293,6 @@ def login_window():
 root = Tk()
 root.geometry('500x350')
 root.resizable(0,0)
-# root.config(bg="red")
 container = Frame(root, width=500, height=350)
 container.pack()
 alert=Label(container, text="Welcome User!", fg="red")
