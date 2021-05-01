@@ -1,4 +1,4 @@
-# Password Manager (v0.01)
+# Password Manager (v0.0.1)
 Please check session3.py.. Its done...(I hope)
 
 23/12/2020 - Added Encryption and hashing. However I am not sure that it's secure because the decrypter function is in the same place..... It's safe for account password but not for saved passwords.... 
