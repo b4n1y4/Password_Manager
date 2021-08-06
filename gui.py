@@ -9,7 +9,7 @@ def clearFrame():
 def showpass_window(a, b):
     clearFrame()
     root.title("Passwords - "+ a)
-    frame = Frame(container)
+    frame = Listbox(container)
     frame.pack()
     dict = o.pass_list[a]
     list = []
@@ -17,6 +17,7 @@ def showpass_window(a, b):
     delbtnlst = []
     updatebtnlst = []
     labellst = []
+    
     for key in dict.keys():
         list.append(key)
     def showpass(usr,key, ind):
@@ -55,7 +56,7 @@ def showpass_window(a, b):
         hide_btn.grid(row=0, column=0, padx=10, pady=10)
     back_btn = Button(btn_frame, text="Back", command= lambda: logged_in(a, b),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
     back_btn.grid(row=0, column=1, padx=10, pady=10)
-    btn_frame.pack(pady=10)
+    btn_frame.pack(side=BOTTOM, pady=10)
     
 
 def updatepass_window(usr, key, pwd):
@@ -202,11 +203,15 @@ def delacc_window(usr, pwd):
     Button(btn_frame, text="No, I changed my mind, don't delete.", command= lambda: logged_in(usr, pwd)).grid(row=0, column=1, padx=10, pady=10)
     btn_frame.pack(pady=10)
 
+def logout(a):
+    o.log_data(f"{a} logged out: {time.ctime(time.time())}\n")
+    clearFrame()
+
 
 def logged_in(a, b):
     clearFrame()
     root.title("Account - "+a)
-    logout_btn = Button(container, text="Logout", command = lambda: [clearFrame(), login_window()], width=20)
+    logout_btn = Button(container, text="Logout", command = lambda: [logout(a), login_window()], width=20)
     addpass_btn = Button(container, text="Add password",command = lambda: [clearFrame(),addpass_window(a, b)], width=20)
     showpass_btn = Button(container, text="Show Passwords", command=lambda: [clearFrame(), showpass_window(a, b)], width=20)
     updateaccpass_btn = Button(container, text="Update Account Password",command=lambda: updateaccpass_window(a,b), width=20)
@@ -293,8 +298,11 @@ def login_window():
 root = Tk()
 root.geometry('500x350')
 root.resizable(0,0)
+
 container = Frame(root, width=500, height=350)
 container.pack()
+
+
 alert=Label(container, text="Welcome User!", fg="red")
 alert.grid(row=4, column=0)
 

@@ -6,19 +6,31 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 import getpass
+import time
+
+
 filename = 'C:/user_list.json'
+logfile = './log.txt'
+
 with open(filename) as usrs:
     data = json.load(usrs)
 usr_list=data["users"]
 pass_list=data["passwords"]
+
+
+def log_data(log):
+    with open("./log.txt", "a") as log_file:
+        log_file.write(log)
+
+
 def log_in(a,b):
         if usr_list[a] == convert_to_hash(b):
-            print ("welcome! aaha login")
-            print("__________________________________\n")
+            log_data(f"{a} logged in: {time.ctime(time.time())}\n")
+            # print("__________________________________\n")
             # logged_in(a)
             return True
         else:
-            print ("Password galat h")
+            log_data ("Wrong password entered")
             return False
 def logged_in(a):
     while(True):
@@ -81,7 +93,7 @@ def add_pass(usrname, key, pwd):
     pass_list[usrname][key] = encrypter(pwd)
     data["passwords"] = pass_list
     update_record()
-    print(f"Password for {usrname} added successfully")
+    log_data(f"Password for user - {usrname} key - {key} added successfully: {time.ctime(time.time())}\n")
 
 
 def del_pass(a, key):
@@ -91,6 +103,7 @@ def del_pass(a, key):
     pass_list[a].pop(key)
     data["passwords"] = pass_list
     update_record()
+    log_data(f"Password for {key} in user - {a} deleted: {time.ctime(time.time())}\n")
         # else:
             # print("Wrong password entered. Password not deleted.\n")
     # else:
@@ -101,26 +114,27 @@ def update_pass(a):
         for key in pass_list[a]:
             print(f"{key}")
         inp = str(input("Enter the key\n"))
-        old_pass = (str(getpass.getpass("Enter the old password.\n")))
-        if decrypter(pass_list[a][inp]) == old_pass:
-            pass_list[a][inp] = encrypter(str(getpass.getpass("Enter the new password.\n")))
-            if check_auth(a):
-                data["passwords"] = pass_list
-                update_record()
-                print(f"Password for {inp} updated successfully\n")
+        if inp in pass_list[a]:
+            old_pass = (str(getpass.getpass("Enter the old password.\n")))
+            if decrypter(pass_list[a][inp]) == old_pass:
+                pass_list[a][inp] = encrypter(str(getpass.getpass("Enter the new password.\n")))
+                if check_auth(a):
+                    data["passwords"] = pass_list
+                    update_record()
+                    log_data(f"Password for {inp} in user - {a} updated successfully: {time.ctime(time.time())}\n")
+                else:
+                    print("Wrong password entered!")
             else:
-                print("Wrong password entered!")
+                    print("Wrong password entered!")
         else:
-                print("Wrong password entered!")
-    else:
-        print(f"Key - {inp} does not exist.\n")
+            print(f"Key - {inp} does not exist.\n")
 def update_acc_pass(username):
     username = username.lower()
     if check_auth(username):
         usr_list[username] = convert_to_hash(str(getpass.getpass("Enter the new password.\n")))
         data["users"] = usr_list
         update_record()
-        print("Account password updated successfully")
+        log_data(f"Account password for user - {username} updated successfully: {time.ctime(time.time())}")
     else:
         print("Wrong password entered!")
 def del_acc(username):
@@ -131,6 +145,7 @@ def del_acc(username):
     data["users"] = usr_list
     data["passwords"] = pass_list
     update_record()
+    log_data(f"Account - {username} deleted: {time.ctime(time.time())}")
     # print(f"Account - {username} Deleted")
     # else:
         # print("Wrong password entered")
