@@ -20,7 +20,7 @@ pass_list=data["passwords"]
 
 def log_data(log):
     with open("./log.txt", "a") as log_file:
-        log_file.write(log)
+        log_file.write(log+"\n")
 
 
 def log_in(a,b):

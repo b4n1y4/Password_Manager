@@ -2,6 +2,8 @@ from tkinter import *
 import managePass as o
 import time
 from tkinter import messagebox
+
+
 def clearFrame():
     for widget in container.winfo_children():
         widget.destroy()
@@ -93,8 +95,10 @@ def updatepass_window(usr, key, pwd):
     conf_label.grid(row=2, column=0,padx=5, pady=10)
     conf_entry.grid(row=2, column=1,padx=5, pady=10)
     btn.pack()
-    back_btn = Button(container, text="Back", command= lambda: logged_in(usr, pwd),borderwidth=0, width=10, bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
+    back_btn = Button(container, text="Back", command= lambda: logged_in(usr, pwd), borderwidth=0, width=10,
+                      bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white")
     back_btn.pack(pady=10)
+
 
 def addpass_window(a, b):
     root.title("Add password")
@@ -120,7 +124,8 @@ def addpass_window(a, b):
         conf = passconfirm_entry.get().strip()
         if (pwd == conf):
             if key in list(o.pass_list[a]):
-                Label(container, text=f'The key {key} already exists.\nClick on the following button to update the password or chose a new key').pack()
+                Label(container, text=f'The key {key} already exists.\nClick on the following button to update'
+                                      f' the password or chose a new key').pack()
                 Button(container, text="Update", command=lambda: updatepass_window(a, key, pwd)).pack()
             else:
                 o.add_pass(a, key, pwd)
@@ -223,8 +228,6 @@ def logged_in(a, b):
     updateaccpass_btn.grid(row=4, column=0, pady=10)
     delacc_btn.grid(row=5, column=0, pady=10)
 
-
-
 def login(a, b):
     if not a:
         Label(container, text="Please Enter the Username", fg='red', width=20).grid(row=4, column=0)
@@ -270,7 +273,8 @@ def signup_window():
     pass_entry.grid(row=0,column=1, padx=20, pady=10)
     usr_frame.grid(row=0, column=0)
     pass_frame.grid(row=1, column=0)
-    signup_btn = Button(container, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", command=lambda: signup(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
+    signup_btn = Button(container, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b",
+                        fg="white", command=lambda: signup(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
     signup_btn.grid(row=3,column=0, pady=10)
     back_btn = Button(container, text="Back", command=lambda: [clearFrame(), login_window()],bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", borderwidth=0, width=15)
     back_btn.grid(row=4, column=0, pady=10)
@@ -290,10 +294,13 @@ def login_window():
     pass_entry.grid(row=0,column=1, padx=20, pady=10)
     usr_frame.grid(row=0, column=0)
     pass_frame.grid(row=1, column=0)
-    login_btn = Button(container, text="LOGIN", bg="#35d132", activebackground="#2fb82c", fg="white", activeforeground="white", command=lambda: login(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
+    login_btn = Button(container, text="LOGIN", bg="#35d132", activebackground="#2fb82c",
+                       fg="white", activeforeground="white", command=lambda: login(usr_entry.get().strip(), pass_entry.get().strip()),borderwidth=0, width=15)
     login_btn.grid(row=2, column=0)
-    signup_btn = Button(container, text="SIGNUP",bg="#ff7575", activebackground="#ff3b3b", fg="white", activeforeground="white", command=signup_window,borderwidth=0, width=15)
+    signup_btn = Button(container, text="SIGNUP", bg="#ff7575", activebackground="#ff3b3b",
+                        fg="white", activeforeground="white", command=signup_window,borderwidth=0, width=15)
     signup_btn.grid(row=3,column=0, pady=10)
+
 
 root = Tk()
 root.geometry('500x350')
